@@ -130,6 +130,7 @@
     <ClCompile Include="AirPlane.cpp" />
     <ClCompile Include="AirplaneBookingSystem.cpp" />
     <ClCompile Include="ConfigReader.cpp" />
+    <ClCompile Include="Flight.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Reader.cpp" />
     <ClCompile Include="Ticket.cpp" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="AirPlane.h" />
     <ClInclude Include="ConfigReader.h" />
+    <ClInclude Include="Flight.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Reader.h" />
     <ClInclude Include="Ticket.h" />
