@@ -17,7 +17,7 @@ public:
 
 	bool FreeAllSeats() {};
 	std::vector<int> AllAvailable() {};
-	bool CheckAvailability(int seatNo) {};
+	bool CheckAvailability(int seatNo) { return true; };
 
 };
 

@@ -7,8 +7,7 @@ class Ticket
 public:
     Ticket(const std::string& passengerName, const int seatNo, const std::string flightNo, const std::string& date, const int price, const std::string& status)
         : passengerName(passengerName), seatNo(seatNo), flightNo(flightNo), date(date), price(price), status(status) { };
-    Ticket(const Ticket& ticketToCopyTo) = delete;
-    Ticket(Ticket&& ticketToCopyTo) = delete;
+    //Ticket(Ticket&& ticketToCopyTo) = delete;
 
     std::string getAllInfo() const;
     const std::string& getPassengerName() const { return passengerName; }

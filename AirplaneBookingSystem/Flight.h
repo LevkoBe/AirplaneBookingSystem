@@ -47,7 +47,7 @@ public:
     }
 
     bool expectATicket(std::string seatNumber, Person& person) {
-        if (!isValid)
+        if (!isValid(seatNumber))
         {
             std::cout << "Sorry, that part of a plane isn't available.";
             return false;
