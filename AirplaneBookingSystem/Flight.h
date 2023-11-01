@@ -103,6 +103,10 @@ public:
             seatNumber[0] >= 'A' && seatNumber[0] <= 'Z');
     }
 
+    std::string getID() {
+        return ID;
+    }
+
 };
 
 
