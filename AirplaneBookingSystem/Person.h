@@ -12,13 +12,28 @@ private:
 	int money;
 	std::vector<Ticket> tickets;
 public:
-	Person(const std::string& name, int money, int age = 0) : name(name), money(money) {
+	Person(const std::string& name, int money, int age = 20) : name(name), money(money) {
 		setAge(age); // while (!setAge(age)) {}
+	}
+
+	std::string allInfo() const {
+		std::string result = "Mr(s) " + name + " is " + std::to_string(age) + " years old, and has " + std::to_string(money) + " dollars.\n" +
+			"He has " + std::to_string(tickets.size()) + " tickets:\n";
+		for (const auto& ticket : tickets)
+		{
+			result += ticket.getAllInfo() + "\n";
+		}
+		return result;
 	}
 
 	std::string getName() const {
 		return name;
 	}
+
+	std::vector<Ticket> getTickets() const {
+		return tickets;
+	}
+
 	void setAge(int a) {
 		if (a > 0 && a <= 120) {
 			age = a;

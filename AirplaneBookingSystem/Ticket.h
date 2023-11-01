@@ -5,13 +5,14 @@
 class Ticket
 {
 public:
-    Ticket(const std::string& passengerName, const int seatNo, const std::string flightNo, const std::string& date, const int price, const std::string& status)
+    Ticket() : passengerName(""), seatNo(""), flightNo(""), date(""), price(0), status("") {}
+    Ticket(const std::string& passengerName, const std::string seatNo, const std::string flightNo, const std::string& date, const int price, const std::string& status)
         : passengerName(passengerName), seatNo(seatNo), flightNo(flightNo), date(date), price(price), status(status) { };
     //Ticket(Ticket&& ticketToCopyTo) = delete;
 
     std::string getAllInfo() const;
     const std::string& getPassengerName() const { return passengerName; }
-    int getSeatNo() const { return seatNo; }
+    std::string getSeatNo() const { return seatNo; }
     std::string getFlightNo() const { return flightNo; }
     const std::string& getDate() const { return date; }
     int getPrice() const { return price; }
@@ -19,7 +20,7 @@ public:
 
 private:
     std::string passengerName;
-    int seatNo;
+    std::string seatNo;
     std::string flightNo;
     std::string date;
     int price;

@@ -1,11 +1,12 @@
 #include <iostream>
+#include <string>
 #include <tuple>
 #include "ConfigReader.h"
 #include "Flight.h"
 #include "Person.h"
-#include "AirPlane.h"
 
 int main() {
+
     ConfigReader configReader;
     std::string configFileContent = configReader.ReadFile("configs.txt");
 
@@ -26,41 +27,146 @@ int main() {
         flights.push_back(flight);
     }
 
+    std::vector<Person> people;
+
+    std::string command;
     while (true) {
-        std::cout << "Airplane Booking System\n";
-        std::cout << "1. View available seats\n";
-        std::cout << "2. Book a ticket\n";
-        std::cout << "3. Exit\n";
-        std::cout << "Enter your choice: ";
+        std::cout << "Enter a command (e.g., 'person John 1000', 'book John FQ12 A1', 'return John FQ12 A1', 'info ticket A1', 'info person John', '-'): \n";
+        std::cin >> command;
 
-        int choice;
-        std::cin >> choice;
+        if (command == "person") {
+            std::string name;
+            int money;
+            std::cin >> name >> money;
 
-        switch (choice) {
-        case 1:
-            std::cout << "Select a flight (0-" << flights.size() - 1 << "): ";
-            int selectedFlight;
-            std::cin >> selectedFlight;
-            if (selectedFlight >= 0 && selectedFlight < flights.size()) {
-                std::cout << "Available seats for Flight " << flights[selectedFlight].getID() << ":\n";
-                std::cout << flights[selectedFlight].availableSeats() << "\n";
+            bool personExists = false;
+            for (auto& person : people) {
+                if (person.getName() == name) {
+                    personExists = true;
+                    if (money > 0) {
+                        person.gainMoney(money);
+                        std::cout << "+\n";
+                    }
+                    else {
+                        person.wasteMoney(-money);
+                        std::cout << "-\n";
+                    }
+                    break;
+                }
+            }
+
+            if (!personExists) {
+                Person newPerson(name, money);
+                people.push_back(newPerson);
+                std::cout << "++\n";
+            }
+        }
+
+        else if (command == "book") {
+            std::string name, flightID, seatNumber;
+            std::cin >> name >> flightID >> seatNumber;
+
+            Person* personToBook = nullptr;
+            for (auto& person : people) {
+                if (person.getName() == name) {
+                    personToBook = &person;
+                    break;
+                }
+            }
+
+            Flight* flightToBook = nullptr;
+            for (auto& flight : flights) {
+                if (flight.getID() == flightID) {
+                    flightToBook = &flight;
+                    break;
+                }
+            }
+
+            if (personToBook && flightToBook) {
+                flightToBook->book(seatNumber, *personToBook);
             }
             else {
-                std::cout << "Invalid flight selection.\n";
+                std::cout << "Person or flight not found. Please check the name and flight ID." << std::endl;
             }
-            break;
-
-        case 2:
-            // Book a ticket
-            // Implement the ticket booking process here using Flight and Person classes
-            break;
-
-        case 3:
-            return 0;
-
-        default:
-            std::cout << "Invalid choice. Try again.\n";
         }
+
+        else if (command == "return") {
+            std::string name, flightID, seatNumber;
+            std::cin >> name >> flightID >> seatNumber;
+
+            Person* personToReturn = nullptr;
+            for (auto& person : people) {
+                if (person.getName() == name) {
+                    personToReturn = &person;
+                    break;
+                }
+            }
+
+            Flight* flightToReturn = nullptr;
+            for (auto& flight : flights) {
+                if (flight.getID() == flightID) {
+                    flightToReturn = &flight;
+                    break;
+                }
+            }
+
+            if (personToReturn && flightToReturn) {
+                Ticket ticketToReturn;
+                for (auto& ticket : personToReturn->getTickets()) {
+                    if (ticket.getFlightNo() == flightID && ticket.getSeatNo() == seatNumber) {
+                        ticketToReturn = ticket;
+                        break;
+                    }
+                }
+
+                if (ticketToReturn.getSeatNo() == seatNumber) {
+                    flightToReturn->returnTicket(ticketToReturn, *personToReturn);
+                }
+                else {
+                    std::cout << "Ticket not found for the provided seat number and flight ID." << std::endl;
+                }
+            }
+            else {
+                std::cout << "Person or flight not found. Please check the name and flight ID." << std::endl;
+            }
+        }
+        else if (command == "info") {
+            std::cin >> command;
+            if (command == "person") {
+                std::string name;
+                std::cin >> name;
+
+                Person* personToCheck = nullptr;
+                for (auto& person : people) {
+                    if (person.getName() == name) {
+                        personToCheck = &person;
+                        break;
+                    }
+                }
+                std::cout << personToCheck->allInfo();
+            }
+            else if (command == "ticket") {
+                std::string seatNumber;
+                std::cin >> seatNumber;
+
+                for (const auto& person : people) {
+                    for (const auto& ticket : person.getTickets()) {
+                        if (ticket.getSeatNo() == seatNumber) {
+                            std::cout << ticket.getAllInfo() << std::endl;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if (command[0] == '-')
+        {
+            return 0;
+        }
+        else {
+            std::cout << "Invalid command. Please enter a valid command." << std::endl;
+        }
+
     }
 
     return 0;

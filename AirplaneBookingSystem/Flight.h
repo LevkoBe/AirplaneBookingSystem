@@ -39,7 +39,7 @@ public:
     int price(int row) {
         for (int i = 0; i < fromToPrice.size(); i++)
         {
-            if (row > fromToPrice[i][0] && row < fromToPrice[i][1]) {
+            if (row >= fromToPrice[i][0] && row <= fromToPrice[i][1]) {
                 return fromToPrice[i][2];
             }
             return -1;
@@ -71,7 +71,7 @@ public:
         int row = std::stoi(seatNumber.substr(1));
         int seatPrice = price(row);
         std::string name = person.getName();
-        Ticket ticket(name, row, ID, date, seatPrice, "Booked");
+        Ticket ticket(name, seatNumber, ID, date, seatPrice, "Booked");
         bookedSeats.push_back(seatNumber);
         person.wasteMoney(seatPrice);
         person.gainATicket(ticket);
@@ -103,7 +103,7 @@ public:
             seatNumber[0] >= 'A' && seatNumber[0] <= 'Z');
     }
 
-    std::string getID() {
+    std::string getID() const {
         return ID;
     }
 
